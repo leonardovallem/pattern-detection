@@ -1,14 +1,15 @@
+import {Stack} from "@mui/material"
+import {BrowserRouter} from "react-router-dom"
+
 import './App.css'
-import {Button, Stack} from "@mui/material"
-import {FileUpload} from "@mui/icons-material"
+import Routes from "./Routes"
 
 function App() {
     return (
-        <Stack>
-            <Button variant="contained" component="label" endIcon={<FileUpload/>}>
-                Upload
-                <input hidden accept="image/*" multiple type="file"/>
-            </Button>
+        <Stack width="100vw" height="100vh">
+            <BrowserRouter>
+                <Routes/>
+            </BrowserRouter>
         </Stack>
     )
 }

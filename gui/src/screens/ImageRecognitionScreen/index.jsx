@@ -21,7 +21,7 @@ function ImageRecognitionScreen() {
         >
             Discard image
         </Button>
-        <img className="sample-image" src={image}/>
+        <img className="sample-image" src={image} onError={() => navigate("/")}/>
     </Stack>
 }
 

@@ -1,0 +1,8 @@
+.code-block {
+    display: inline-flex;
+    background-color: #414141;
+    color: red;
+    font-weight: bold;
+    padding: 5px 8px;
+    border-radius: 5px;
+}

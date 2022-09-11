@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from "react"
-import {Button, Collapse, Stack, Typography} from "@mui/material"
+import {Alert, Button, Collapse, Snackbar, Stack, Typography} from "@mui/material"
 import {Close, FileDownload, NavigateNext} from "@mui/icons-material"
 import {useNavigate} from "react-router-dom"
 import ReactCrop from "react-image-crop"
 
 import Code from "../../components/Code"
 import Logo from "../../assets/tecknee-logo.png"
+import ImagePickOption from "../../components/ImagePickOption/index.jsx"
+import Python from "../../Python.js"
 
 import "./index.css"
 import "react-image-crop/dist/ReactCrop.css"
-import ImagePickOption from "../../components/ImagePickOption/index.jsx";
+import SnackbarContent from "../../util/SnackbarContent.js";
 
 function ImagePickerScreen() {
     const navigate = useNavigate()
@@ -18,6 +20,13 @@ function ImagePickerScreen() {
     const [crop, setCrop] = useState(null)
     const [cropSelected, setCropSelected] = useState(false)
     const [croppedImage, setCroppedImage] = useState(null)
+
+    const [python, setPython] = useState(null)
+    const [snackBarContent, setSnackBarContent] = useState(null)
+
+    useEffect(() => {
+        if (window.pywebview?.api) setPython(new Python(window.pywebview.api))
+    }, [window.pywebview])
 
     useEffect(() => {
         document.addEventListener("keydown", e => {
@@ -76,7 +85,6 @@ function ImagePickerScreen() {
         const canvas = document.createElement("canvas")
         const scaleX = img.naturalWidth / img.width
         const scaleY = img.naturalHeight / img.height
-        console.log(crop)
         canvas.width = crop.width
         canvas.height = crop.height
         const ctx = canvas.getContext("2d")
@@ -135,9 +143,7 @@ function ImagePickerScreen() {
                     <ReactCrop crop={crop}
                                onDragStart={() => setCropSelected(false)}
                                onDragEnd={() => setCropSelected(true)}
-                               onChange={async c => {
-                                   setCrop(c)
-                               }}
+                               onChange={async c => setCrop(c)}
                                onComplete={c => makeClientCrop(c)}
                     >
                         <img className="user-image" src={image}/>
@@ -152,6 +158,16 @@ function ImagePickerScreen() {
                                     disabled={croppedImage === null}
                                     startIcon={<FileDownload/>}
                                     href={croppedImage}
+                                    onClick={() => {
+                                        fetch(croppedImage)
+                                            .then(image => image.blob())
+                                            .then(blob => blob.toBase64())
+                                            .then(base64 => python?.downloadImage(base64))
+                                            .then(res => setSnackBarContent(new SnackbarContent(
+                                                res ? "Crop downloaded successfully" : "Error while trying to download crop",
+                                                res ? "success" : "error"
+                                            )))
+                                    }}
                                     download
                             >
                                 Download
@@ -175,10 +191,10 @@ function ImagePickerScreen() {
                         <ImagePickOption label="Select a picture from your device"
                                          onUpload={file => openImage(file)}
                                          hint={
-                                             <Typography variant="body1" component="span">
+                                             <>
                                                  You can also paste a image from your clipboard
                                                  with <Code>Ctrl</Code> + <Code>V</Code>
-                                             </Typography>
+                                             </>
                                          }
                         />
 
@@ -189,6 +205,14 @@ function ImagePickerScreen() {
                     </Stack>
                 </Stack>
         }
+
+        <Snackbar open={snackBarContent !== null}
+                  onClose={() => setSnackBarContent(null)}
+                  autoHideDuration={5000}
+                  key={snackBarContent}
+        >
+            <Alert severity={snackBarContent?.level}>{snackBarContent?.message}</Alert>
+        </Snackbar>
     </Stack>
 }
 

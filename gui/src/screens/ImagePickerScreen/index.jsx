@@ -4,14 +4,14 @@ import {Close, FileDownload, NavigateNext} from "@mui/icons-material"
 import {useNavigate} from "react-router-dom"
 import ReactCrop from "react-image-crop"
 
-import Code from "../../components/Code"
-import Logo from "../../assets/tecknee-logo.png"
 import ImagePickOption from "../../components/ImagePickOption/index.jsx"
+import Code from "../../components/Code"
+import SnackbarContent from "../../util/SnackbarContent.js"
 import Python from "../../Python.js"
+import Logo from "../../assets/tecknee-logo.png"
 
 import "./index.css"
 import "react-image-crop/dist/ReactCrop.css"
-import SnackbarContent from "../../util/SnackbarContent.js";
 
 function ImagePickerScreen() {
     const navigate = useNavigate()
@@ -112,7 +112,6 @@ function ImagePickerScreen() {
         }
     }
 
-    // noinspection JSValidateTypes
     return <Stack className="image-picker column">
         <Collapse in={image !== null}
                   className="discard-image-btn"

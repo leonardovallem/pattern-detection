@@ -1,11 +1,82 @@
+.detection-progress-indicator, .fab-go-back {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+.detection-progress-indicator {
+    right: 0 !important;
+    height: 8px !important;
+}
+
+.fab-go-back {
+    margin: 3em !important;
+}
+
+.fab-go-back > a {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
 .recognition-wrapper {
     width: 100vw;
     height: 100vh;
+    box-sizing: border-box;
+    padding: 8em;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr 3fr 2fr 1fr;
+    grid-template-rows: 1fr 1fr 3fr;
+    min-height: 0;
+    min-width: 0;
+}
+
+.detection-content {
+    grid-column: 2 / 5;
+    grid-row: 3;
+
+    display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
+}
+
+.pattern-grid-item {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.image-picker-grid-item {
+    grid-column: 3;
+    grid-row: 3;
 }
 
 .sample-image {
     object-fit: contain;
+}
+
+.detection-image-overlay {
+    display: grid;
+    grid-template-areas: "image";
+}
+
+.detection-image-overlay > * {
+    grid-area: image;
+}
+
+.detection-image {
+    object-fit: contain;
+    max-height: 55vh !important;
+    max-width: 80vw !important;
+}
+
+.image-picker-component {
+    grid-column: 2 / 4;
+    grid-row: 3;
+    inline-size: fit-content;
+    padding: 4em !important;
+}
+
+.image-picker-component > * {
+    font-size: 1.25em !important;
 }

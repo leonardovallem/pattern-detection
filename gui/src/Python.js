@@ -5,5 +5,5 @@ export default class Python {
 
     testPrint = async () => await this.api.testPrint()
     downloadImage = async base64 => await this.api.downloadImage(base64)
-    processImage = async base64 => await this.api.processImage(base64)
+    processImage = async (pattern, image) => await this.api.processImage(pattern, image)
 }

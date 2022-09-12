@@ -1,7 +1,6 @@
 import React from "react"
 import {Button, Stack, Typography} from "@mui/material"
 import {FileUpload} from "@mui/icons-material"
-import Code from "../Code/index.jsx";
 
 const style = {
     justifyContent: "space-evenly",
@@ -12,20 +11,20 @@ const style = {
     borderRadius: "1em"
 }
 
-function ImagePickOption({label, hint, onUpload, color}) {
-    return <Stack style={style}>
+function ImagePickOption({label, hint, onUpload, color, className}) {
+    return <Stack style={style} className={className}>
         <Typography textAlign="body1" marginY="1em">{label}</Typography>
 
         <Button variant="contained"
                 component="label"
                 color={color ?? "primary"}
-                endIcon={<FileUpload/>}
+                endIcon={<FileUpload />}
         >
             Upload
             <input hidden
                    accept=".jpg,.jpeg,.png"
                    multiple type="file"
-                   onChange={e => onUpload(e.target.files[0])}/>
+                   onChange={e => onUpload(e.target.files[0])} />
         </Button>
 
         <Typography variant="body1" component="span">{hint}</Typography>

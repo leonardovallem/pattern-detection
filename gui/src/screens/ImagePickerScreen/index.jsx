@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react"
-import {Alert, Button, Collapse, Snackbar, Stack, Typography} from "@mui/material"
+import {Alert, Button, Collapse, Snackbar, Stack} from "@mui/material"
 import {Close, FileDownload, NavigateNext} from "@mui/icons-material"
 import {useNavigate} from "react-router-dom"
 import ReactCrop from "react-image-crop"
 
 import ImagePickOption from "../../components/ImagePickOption/index.jsx"
-import Code from "../../components/Code"
 import SnackbarContent from "../../util/SnackbarContent.js"
 import Python from "../../Python.js"
 import Logo from "../../assets/tecknee-logo.png"
@@ -71,33 +70,31 @@ function ImagePickerScreen() {
         navigate("/recognition", {state: URL.createObjectURL(blob)})
     }
 
-    const makeClientCrop = async (crop) => {
+    const makeClientCrop = async (crop, percentCrop) => {
         if ((image && crop.width && crop.height)) {
-            const croppedImg = await getCroppedImage(image, crop)
+            const croppedImg = await getCroppedImage(image, crop, percentCrop)
             setCroppedImage(croppedImg)
         }
     }
 
-    const getCroppedImage = (sourceImage, crop) => {
+    const getCroppedImage = (sourceImage, crop, percentCrop) => {
         const img = document.createElement("img")
         img.src = sourceImage
 
         const canvas = document.createElement("canvas")
-        const scaleX = img.naturalWidth / img.width
-        const scaleY = img.naturalHeight / img.height
         canvas.width = crop.width
         canvas.height = crop.height
         const ctx = canvas.getContext("2d")
         ctx.drawImage(
             img,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
+            img.width * (percentCrop.x / 100),
+            img.height * (percentCrop.y / 100),
+            img.width * (percentCrop.width / 100),
+            img.height * (percentCrop.height / 100),
             0,
             0,
             crop.width,
-            crop.height
+            crop.height,
         )
 
         try {
@@ -120,7 +117,7 @@ function ImagePickerScreen() {
             <Stack direction="row" justifyContent="center" gap="1.4em">
                 <Button variant="outlined"
                         color="error"
-                        endIcon={<Close/>}
+                        endIcon={<Close />}
                         onClick={() => {
                             setImage(null)
                             setCrop(null)
@@ -130,9 +127,9 @@ function ImagePickerScreen() {
                     Discard image
                 </Button>
 
-                <Typography textAlign="body1" component="span">
-                    You can also discard the image by pressing <Code>Ctrl</Code> + <Code>Z</Code>
-                </Typography>
+                {/*<Typography textAlign="body1" component="span">*/}
+                {/*    You can also discard the image by pressing <Code>Ctrl</Code> + <Code>Z</Code>*/}
+                {/*</Typography>*/}
             </Stack>
         </Collapse>
 
@@ -143,9 +140,9 @@ function ImagePickerScreen() {
                                onDragStart={() => setCropSelected(false)}
                                onDragEnd={() => setCropSelected(true)}
                                onChange={async c => setCrop(c)}
-                               onComplete={c => makeClientCrop(c)}
+                               onComplete={(c, p) => makeClientCrop(c, p)}
                     >
-                        <img className="user-image" src={image}/>
+                        <img className="user-image" src={image} />
                     </ReactCrop>
                     <Collapse in={cropSelected && crop !== null}
                               className="choose-crop-btn"
@@ -155,7 +152,7 @@ function ImagePickerScreen() {
                             <Button variant="contained"
                                     color="secondary"
                                     disabled={croppedImage === null}
-                                    startIcon={<FileDownload/>}
+                                    startIcon={<FileDownload />}
                                     href={croppedImage}
                                     onClick={() => {
                                         fetch(croppedImage)
@@ -175,7 +172,7 @@ function ImagePickerScreen() {
                             <Button variant="contained"
                                     color="success"
                                     disabled={croppedImage === null}
-                                    endIcon={<NavigateNext/>}
+                                    endIcon={<NavigateNext />}
                                     onClick={async () => navigate("/recognition", {state: croppedImage})}
                             >
                                 Use this crop
@@ -184,17 +181,17 @@ function ImagePickerScreen() {
                     </Collapse>
                 </>
                 : <Stack className="column">
-                    <img src={Logo} className="logo"/>
+                    <img src={Logo} className="logo" />
 
                     <Stack direction="row" gap="1em">
                         <ImagePickOption label="Select a picture from your device"
                                          onUpload={file => openImage(file)}
-                                         hint={
-                                             <>
-                                                 You can also paste a image from your clipboard
-                                                 with <Code>Ctrl</Code> + <Code>V</Code>
-                                             </>
-                                         }
+                            // hint={
+                            //     <>
+                            //         You can also paste a image from your clipboard
+                            //         with <Code>Ctrl</Code> + <Code>V</Code>
+                            //     </>
+                            // }
                         />
 
                         <ImagePickOption label="Select a cropped pattern"

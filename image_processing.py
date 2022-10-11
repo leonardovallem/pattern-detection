@@ -1,11 +1,11 @@
-from cv2 import TM_SQDIFF_NORMED, COLOR_BGR2RGB, matchTemplate, minMaxLoc, cvtColor
+from cv2 import TM_SQDIFF_NORMED, COLOR_BGR2GRAY, matchTemplate, minMaxLoc, cvtColor
 from numpy import array
 
 
 def process_image(pattern, image) -> dict:
     try:
-        pattern = cvtColor(array(pattern), COLOR_BGR2RGB)
-        image = cvtColor(array(image), COLOR_BGR2RGB)
+        pattern = cvtColor(array(pattern), COLOR_BGR2GRAY)
+        image = cvtColor(array(image), COLOR_BGR2GRAY)
 
         result = matchTemplate(pattern, image, TM_SQDIFF_NORMED)
         mn, _, mnLoc, _ = minMaxLoc(result)

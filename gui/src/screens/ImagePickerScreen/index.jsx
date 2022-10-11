@@ -62,7 +62,9 @@ function ImagePickerScreen() {
 
     async function openImage(file) {
         const blob = new Blob([file], {type: file.type})
-        setImage(URL.createObjectURL(blob))
+        const url = URL.createObjectURL(blob)
+        setSnackBarContent(new SnackbarContent(url))
+        setImage(url)
     }
 
     async function openCrop(file) {

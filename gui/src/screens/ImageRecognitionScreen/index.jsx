@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react"
 import {Alert, Button, Fab, Fade, LinearProgress, Snackbar, Stack} from "@mui/material"
-import {Link, useLocation, useNavigate} from "react-router-dom"
+import {useLocation, useNavigate} from "react-router-dom"
 import {ArrowBack, Close} from "@mui/icons-material"
 import ImagePickOption from "../../components/ImagePickOption/index.jsx"
 import Python from "../../Python.js"
@@ -82,21 +82,19 @@ function ImageRecognitionScreen() {
 
     return <div className="recognition-wrapper">
         <Fade in={running} className="detection-progress-indicator">
-            <LinearProgress />
+            <LinearProgress/>
         </Fade>
-        <Fab className="fab-go-back">
-            <Link to="/">
-                <ArrowBack />
-            </Link>
+        <Fab className="fab-go-back" onClick={() => navigate("/")}>
+            <ArrowBack/>
         </Fab>
 
         <div className="pattern-grid-item">
             <Stack gap="1em">
-                <img className="sample-image" src={pattern} onError={() => navigate("/")} />
+                <img className="sample-image" src={pattern} onError={() => navigate("/")}/>
                 <Button variant="outlined"
                         color="error"
                         style={{alignSelf: "center"}}
-                        endIcon={<Close />}
+                        endIcon={<Close/>}
                         onClick={() => navigate("/")}
                 >
                     Discard pattern
@@ -108,13 +106,13 @@ function ImageRecognitionScreen() {
                 image
                     ? <Stack gap="1em" className="image-picker-grid-item">
                         <div className="detection-image-overlay">
-                            <img src={image} ref={detectionImage} className="detection-image" />
-                            <canvas ref={canvas} />
+                            <img src={image} ref={detectionImage} className="detection-image"/>
+                            <canvas ref={canvas}/>
                         </div>
                         <Button variant="outlined"
                                 color="error"
                                 style={{alignSelf: "center"}}
-                                endIcon={<Close />}
+                                endIcon={<Close/>}
                                 onClick={() => setImage(null)}
                         >
                             Discard image

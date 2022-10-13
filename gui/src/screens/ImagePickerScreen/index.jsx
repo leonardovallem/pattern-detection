@@ -6,11 +6,12 @@ import ReactCrop from "react-image-crop"
 
 import ImagePickOption from "../../components/ImagePickOption/index.jsx"
 import SnackbarContent from "../../util/SnackbarContent.js"
-import Python from "../../Python.js"
 import Logo from "../../assets/tecknee-logo.png"
 
 import "./index.css"
 import "react-image-crop/dist/ReactCrop.css"
+
+const {ipcRenderer} = require("electron")
 
 function ImagePickerScreen() {
     const navigate = useNavigate()
@@ -20,12 +21,7 @@ function ImagePickerScreen() {
     const [cropSelected, setCropSelected] = useState(false)
     const [croppedImage, setCroppedImage] = useState(null)
 
-    const [python, setPython] = useState(null)
     const [snackBarContent, setSnackBarContent] = useState(null)
-
-    useEffect(() => {
-        if (window.pywebview?.api) setPython(new Python(window.pywebview.api))
-    }, [window.pywebview])
 
     useEffect(() => {
         document.addEventListener("keydown", e => {
@@ -158,7 +154,7 @@ function ImagePickerScreen() {
                                         fetch(croppedImage)
                                             .then(image => image.blob())
                                             .then(blob => blob.toBase64())
-                                            .then(base64 => python?.downloadImage(base64))
+                                            .then(base64 => ipcRenderer.send("save-image", base64))
                                             .then(res => setSnackBarContent(new SnackbarContent(
                                                 res ? "Crop downloaded successfully" : "Error while trying to download crop",
                                                 res ? "success" : "error"

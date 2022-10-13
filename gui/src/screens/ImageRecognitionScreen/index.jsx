@@ -3,7 +3,7 @@ import {Alert, Button, Fab, Fade, LinearProgress, Snackbar, Stack} from "@mui/ma
 import {Link, useLocation, useNavigate} from "react-router-dom"
 import {ArrowBack, Close} from "@mui/icons-material"
 import ImagePickOption from "../../components/ImagePickOption/index.jsx"
-import Python from "../../Python.js"
+import {processImage} from "../../Api.js"
 import "./index.css"
 import {blobToImage, RuleOfThirds} from "../../util/Util.js";
 
@@ -21,7 +21,7 @@ function ImageRecognitionScreen() {
     const [snackBarContent, setSnackBarContent] = useState(null)
 
     useEffect(() => {
-        if (window.pywebview?.api) setPython(new Python(window.pywebview.api))
+        if (window.pywebview?.api) setPython(new Api(window.pywebview.api))
     }, [window.pywebview])
 
     React.useEffect(() => {
@@ -71,7 +71,7 @@ function ImageRecognitionScreen() {
             .then(img => img.blob())
             .then(blob => blob.toBase64())
 
-        python?.processImage(patternBase64, imageBase64)
+        processImage(patternBase64, imageBase64)
             .then(res => setDetection(res))
             .catch(err => {
                 console.log(err)
